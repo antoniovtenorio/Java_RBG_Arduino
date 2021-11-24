@@ -4,19 +4,27 @@
  * and open the template in the editor.
  */
 import com.fazecast.jSerialComm.SerialPort;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import java.io.OutputStream;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author victo
  */
 public class PrincipalJFrame extends javax.swing.JFrame {
 
+    SerialPort serialPort1;
+    OutputStream outputStream1;
+
     /**
      * Creates new form PrincipalJFrame
      */
     public PrincipalJFrame() {
         initComponents();
-        
-        
+        jButton_disconnect.setEnabled(false);
+
     }
 
     /**
@@ -35,6 +43,18 @@ public class PrincipalJFrame extends javax.swing.JFrame {
         jSlider_green = new javax.swing.JSlider();
         jSlider_blue = new javax.swing.JSlider();
         jSlider_red = new javax.swing.JSlider();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBox_comPort = new javax.swing.JComboBox<>();
+        jButton_connect = new javax.swing.JButton();
+        jButton_disconnect = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel_red = new javax.swing.JLabel();
+        jLabel_green = new javax.swing.JLabel();
+        jLabel_blue = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,6 +74,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         jSlider_green.setBackground(new java.awt.Color(51, 204, 0));
         jSlider_green.setMaximum(255);
+        jSlider_green.setValue(0);
+        jSlider_green.setInverted(true);
         jSlider_green.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSlider_greenStateChanged(evt);
@@ -62,6 +84,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         jSlider_blue.setBackground(new java.awt.Color(0, 0, 255));
         jSlider_blue.setMaximum(255);
+        jSlider_blue.setValue(0);
+        jSlider_blue.setInverted(true);
         jSlider_blue.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSlider_blueStateChanged(evt);
@@ -70,6 +94,8 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
         jSlider_red.setBackground(new java.awt.Color(255, 0, 0));
         jSlider_red.setMaximum(255);
+        jSlider_red.setValue(0);
+        jSlider_red.setInverted(true);
         jSlider_red.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSlider_redStateChanged(evt);
@@ -111,21 +137,145 @@ public class PrincipalJFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Select Port"));
+
+        jLabel4.setText("Port Connection");
+
+        jComboBox_comPort.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                jComboBox_comPortPopupMenuWillBecomeVisible(evt);
+            }
+        });
+
+        jButton_connect.setText("Connect");
+        jButton_connect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_connectActionPerformed(evt);
+            }
+        });
+
+        jButton_disconnect.setText("Disconnect");
+        jButton_disconnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_disconnectActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBox_comPort, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton_connect)
+                .addGap(18, 18, 18)
+                .addComponent(jButton_disconnect)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jComboBox_comPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton_connect)
+                    .addComponent(jButton_disconnect))
+                .addGap(26, 26, 26))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Valores"));
+
+        jLabel5.setText("RED");
+
+        jLabel6.setText("GREEN");
+
+        jLabel7.setText("BLUE");
+
+        jLabel_red.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel_red.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel_red.setText("255");
+
+        jLabel_green.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel_green.setForeground(new java.awt.Color(0, 204, 0));
+        jLabel_green.setText("255");
+
+        jLabel_blue.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel_blue.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel_blue.setText("255");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel_red, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel_green)
+                        .addGap(13, 13, 13)))
+                .addGap(71, 71, 71)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_blue))
+                .addGap(18, 18, 18))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel_red)
+                    .addComponent(jLabel_green)
+                    .addComponent(jLabel_blue))
+                .addGap(44, 44, 44))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -134,16 +284,112 @@ public class PrincipalJFrame extends javax.swing.JFrame {
 
     private void jSlider_greenStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider_greenStateChanged
         // TODO add your handling code here:
-        System.out.println(jSlider_green.getValue()); 
+
+        try {
+            //changing label value
+            jLabel_green.setText(String.valueOf(255 - jSlider_green.getValue()));
+            
+            outputStream1 = serialPort1.getOutputStream();
+            String value = "g" + jSlider_green.getValue() + "\n \r";
+
+            outputStream1.write(value.trim().getBytes());
+            outputStream1.flush();
+            outputStream1.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
     }//GEN-LAST:event_jSlider_greenStateChanged
 
     private void jSlider_blueStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider_blueStateChanged
         // TODO add your handling code here:
+
+        try {
+            //changing label value
+            jLabel_blue.setText(String.valueOf(255 - jSlider_blue.getValue()));
+            
+            outputStream1 = serialPort1.getOutputStream();
+            String value = "b" + jSlider_blue.getValue() + "\n \r";
+            outputStream1.write(value.trim().getBytes());
+            outputStream1.flush();
+            outputStream1.close();
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
     }//GEN-LAST:event_jSlider_blueStateChanged
 
     private void jSlider_redStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider_redStateChanged
         // TODO add your handling code here:
+
+        try {
+            //changing label value
+            jLabel_red.setText(String.valueOf(255 - jSlider_red.getValue()));
+            
+            outputStream1 = serialPort1.getOutputStream();
+            String value = "r" + jSlider_red.getValue() + "\n \r";
+            outputStream1.write(value.trim().getBytes());
+            outputStream1.flush();
+            outputStream1.close();
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
     }//GEN-LAST:event_jSlider_redStateChanged
+
+    private void jButton_connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_connectActionPerformed
+        // TODO add your handling code here:
+        try {
+            SerialPort[] portList = SerialPort.getCommPorts();
+            serialPort1 = portList[jComboBox_comPort.getSelectedIndex()];
+            serialPort1.setBaudRate(9600);
+            serialPort1.setNumDataBits(8);
+            serialPort1.setNumStopBits(1);
+            serialPort1.setParity(0);
+            serialPort1.setFlowControl(0);
+            serialPort1.openPort();
+
+            if (serialPort1.isOpen()) {
+                JOptionPane.showMessageDialog(this, serialPort1.getDescriptivePortName() + " Connected with successfuly");
+               
+                jComboBox_comPort.setEnabled(false);
+                jButton_connect.setEnabled(false);
+                jButton_disconnect.setEnabled(true);
+
+            } else {
+                JOptionPane.showMessageDialog(this, serialPort1.getDescriptivePortName() + " -- Failed to Connect!");
+            }
+
+        } catch (ArrayIndexOutOfBoundsException a) {
+            JOptionPane.showMessageDialog(this, "Please choose any port", "ERROR", ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "ERROR", ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton_connectActionPerformed
+
+    private void jComboBox_comPortPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jComboBox_comPortPopupMenuWillBecomeVisible
+        // TODO add your handling code here:
+        jComboBox_comPort.removeAllItems();
+
+        SerialPort[] portList = SerialPort.getCommPorts();
+        for (SerialPort port : portList) {
+            jComboBox_comPort.addItem(port.getSystemPortName());
+        }
+    }//GEN-LAST:event_jComboBox_comPortPopupMenuWillBecomeVisible
+
+
+    private void jButton_disconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_disconnectActionPerformed
+        // TODO add your handling code here:
+        if (serialPort1.isOpen()) {
+            serialPort1.closePort();
+
+            jComboBox_comPort.setEnabled(true);
+            jButton_connect.setEnabled(true);
+            jButton_disconnect.setEnabled(false);
+        }
+    }//GEN-LAST:event_jButton_disconnectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,10 +427,22 @@ public class PrincipalJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_connect;
+    private javax.swing.JButton jButton_disconnect;
+    private javax.swing.JComboBox<String> jComboBox_comPort;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel_blue;
+    private javax.swing.JLabel jLabel_green;
+    private javax.swing.JLabel jLabel_red;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JSlider jSlider_blue;
     private javax.swing.JSlider jSlider_green;
     private javax.swing.JSlider jSlider_red;
